@@ -1,0 +1,83 @@
+version: "3.8"
+
+services:
+  nginx:
+    restart: unless-stopped
+    container_name: ${PROJECT}_nginx
+    build:
+      context: ./.docker/context
+      dockerfile: images/nginx/Dockerfile
+      args:
+        PHP_FPM_SERVICE_NAME: php-fpm
+    ports:
+      - "${BACKEND_NETWORK}:8000:80"
+    volumes:
+      - ./:/var/www
+      - ./logs/nginx:/var/log/nginx
+    depends_on:
+      - php-fpm
+    networks:
+      backend:
+        aliases:
+          - itmo-nginx
+
+  php-fpm:
+    restart: unless-stopped
+    container_name: ${PROJECT}_php-fpm
+    ports:
+      - "${BACKEND_NETWORK}:9000:9000"
+    build:
+      context: ./.docker/context
+      dockerfile: images/php-fpm/dev/Dockerfile
+    environment:
+      PHP_IDE_CONFIG: serverName=php-fpm
+      APP_ENV: dev
+    env_file:
+      - ../itmo/.env
+    volumes:
+      - ../itmo:/var/www
+      - ./.env:/var/www/.env
+    working_dir: /var/www/
+    depends_on:
+      - mysql
+    networks:
+      backend:
+        aliases:
+          - itmo-php-fpm
+
+  mysql:
+    restart: unless-stopped
+    container_name: ${PROJECT}_mysql
+    build:
+        context: ./.docker/context
+        dockerfile: images/mysql/Dockerfile
+    volumes:
+      - ./.docker/data/mysql:/var/lib/mysql/data
+      - ./.docker/conf/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "${BACKEND_NETWORK}:${MYSQL_PORT}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    networks:
+      backend:
+        aliases:
+          - mysql
+
+
+
+
+networks:
+  backend:
+    name: ${BACKEND_NETWORK_NAME}
+    driver: bridge
+    ipam:
+      config:
+        - subnet: ${BACKEND_SUBNET}
+
+volumes:
+###> doctrine/doctrine-bundle ###
+  database_data:
+###< doctrine/doctrine-bundle ###

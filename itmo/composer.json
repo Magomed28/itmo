@@ -1,0 +1,58 @@
+{
+    "name": "itmo/itmo",
+    "description": "Itmo",
+    "type": "project",
+    "license": "proprietary",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=8.1",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "doctrine/doctrine-bundle": "2.10.*",
+        "doctrine/doctrine-migrations-bundle": "^3.0",
+        "symfony/console": "6.2.*",
+        "symfony/dotenv": "6.2.*",
+        "symfony/framework-bundle": "6.2.*",
+        "symfony/orm-pack": "2.3.*",
+        "symfony/runtime": "6.2.*",
+        "symfony/yaml": "6.2.*",
+        "ramsey/uuid": "^4.1.1",
+        "ramsey/uuid-doctrine": "^1.6",
+        "doctrine/orm": "^2.9",
+        "symfony/validator": "6.2.*",
+        "gedmo/doctrine-extensions": "^3.0",
+        "symfony/messenger": "6.2.*"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "symfony/flex": true,
+            "symfony/runtime": true
+        },
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Itmo\\": "src/Itmo/"
+        }
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ]
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "6.2.*"
+        }
+    }
+}
