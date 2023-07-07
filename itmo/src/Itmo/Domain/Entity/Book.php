@@ -131,9 +131,17 @@ class Book implements JsonSerializable
         return $this->authors;
     }
 
-    public function setAuthors(Collection $authors): Book
+    public function setAuthor(Author $author): Book
     {
-        $this->authors = $authors;
+        $this->authors->add($author);
+
+        return $this;
+    }
+
+    public function removeAuthor(Author $author): Book
+    {
+        $author->getBooks()->removeElement($this);
+        $this->authors->removeElement($author);
 
         return $this;
     }

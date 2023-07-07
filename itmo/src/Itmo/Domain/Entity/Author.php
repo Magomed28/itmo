@@ -77,6 +77,21 @@ class Author implements JsonSerializable
         return $this->books;
     }
 
+    public function setBook(Book $book): Author
+    {
+        $this->books->add($book);
+
+        return $this;
+    }
+
+    public function removeBook(Book $book): Author
+    {
+        $book->getAuthors()->removeElement($this);
+        $this->books->removeElement($book);
+
+        return $this;
+    }
+
     public function __toString(): string
     {
         return json_encode($this->jsonSerialize(),JSON_PRETTY_PRINT);

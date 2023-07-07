@@ -21,7 +21,6 @@ final class Version20230705072348 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE author CHANGE fio fio VARCHAR(255) NOT NULL');
-        $this->addSql('ALTER TABLE author_book ADD PRIMARY KEY (author_id, book_id)');
         $this->addSql('CREATE UNIQUE INDEX author_UN ON author (fio)');
         $this->addSql('CREATE UNIQUE INDEX book_UN ON book (isbn, name)');
         $this->addSql('ALTER TABLE book CHANGE name name VARCHAR(255) NOT NULL, CHANGE isbn isbn VARCHAR(255) NOT NULL, CHANGE number_pages number_pages INT NOT NULL');

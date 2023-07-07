@@ -15,7 +15,7 @@ class ListAuthorHandler implements QueryHandlerInterface
     /**
      * Метод выполняет получение авторов
      */
-    public function __invoke(ListAuthorQuery $addAuthorQuery): string
+    public function __invoke(ListAuthorQuery $listAuthorQuery): string
     {
         return json_encode($this->authorRepository->findAll(),JSON_OBJECT_AS_ARRAY);
     }
